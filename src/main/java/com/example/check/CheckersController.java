@@ -49,38 +49,7 @@ public class CheckersController {
     private void clearBoard(GridPane pane){ // notīra laukumu
         pane.getChildren().clear();
     }
-    private void gameover(GameState gameState){
-        if(gameState.isGameOver()){
-            Dialog dialog = new Dialog();
-            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-            closeButton.managedProperty().bind(closeButton.visibleProperty());
-            ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
-            dialog.setTitle("Game over");
-            Label label = new Label();
 
-            dialog.getDialogPane().setContent(label);
-            if(gameState.getRedScore() == 12){
-                label.setText("Green wins");
-            }else if(gameState.getMovecount() > 79){
-                label.setText("Draw");
-            }else{
-                label.setText("Red wins");
-            }
-            label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-            label.setTextAlignment(TextAlignment.CENTER);
-            dialog.getDialogPane().setContent(label);
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == okButtonType) {
-                    onBackClicked();
-                }
-                return null;
-            });
-            closeButton.setVisible(false);
-            dialog.showAndWait();
-        }
-    }
     private void Draw(GridPane pane, int player){ // zīmē laukumu un apstrādā gājienus
         int count = 0;
         double s = 50;
@@ -166,40 +135,41 @@ public class CheckersController {
                             gamestate.MakeMove(toMake);
                             gameover(gamestate);
                         }
-                        // Aktivizē to dialoga logu kad spēle ir pabeigta
-//                        if(gamestate.isGameOver()){
-//                            Dialog dialog = new Dialog();
-//                            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-//                            Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-//                            closeButton.managedProperty().bind(closeButton.visibleProperty());
-//                            ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-//                            dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
-//                            dialog.setTitle("Game over");
-//                            Label label = new Label();
-//
-//                            dialog.getDialogPane().setContent(label);
-//                            if(gamestate.getRedScore() == 12){
-//                                label.setText("Green wins");
-//                            }else if(gamestate.getMovecount() > 79){
-//                                label.setText("Draw");
-//                            }else{
-//                                label.setText("Red wins");
-//                            }
-//                            label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-//                            label.setTextAlignment(TextAlignment.CENTER);
-//                            dialog.getDialogPane().setContent(label);
-//                            dialog.setResultConverter(dialogButton -> {
-//                                if (dialogButton == okButtonType) {
-//                                    onBackClicked();
-//                                }
-//                                return null;
-//                            });
-//                            closeButton.setVisible(false);
-//                            dialog.showAndWait();
-//                        }
                     });
                 }
             }
+        }
+    }
+    private void gameover(GameState gameState){
+        if(gameState.isGameOver()){
+            Dialog dialog = new Dialog();
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButton.managedProperty().bind(closeButton.visibleProperty());
+            ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
+            dialog.setTitle("Game over");
+            Label label = new Label();
+
+            dialog.getDialogPane().setContent(label);
+            if(gameState.getRedScore() == 12){
+                label.setText("Green wins");
+            }else if(gameState.getMovecount() > 79){
+                label.setText("Draw");
+            }else{
+                label.setText("Red wins");
+            }
+            label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+            label.setTextAlignment(TextAlignment.CENTER);
+            dialog.getDialogPane().setContent(label);
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == okButtonType) {
+                    onBackClicked();
+                }
+                return null;
+            });
+            closeButton.setVisible(false);
+            dialog.showAndWait();
         }
     }
 }

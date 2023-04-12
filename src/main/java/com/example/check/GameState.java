@@ -337,8 +337,7 @@ public class GameState {
     public int getRedScore() {
         return redScore;
     }
-    // pārbauda vai spēle ir beigusies
-    public boolean isGameOver(){
+    public boolean isGameOver(){ // pārbauda vai spēle ir beigusies
         if(redScore == 12 || greenScore == 12 || movecount == 80){
             return true;
         }
@@ -350,38 +349,60 @@ public class GameState {
     public int getTurn() {
         return turn;
     }
-    public int evaluate(int player) { // aatgriež stāvokļa heiristisko novērtējumu
-        int pieceCount = 0;
-        int kingCount = 0;
-        int opponentPieceCount = 0;
-        int opponentKingCount = 0;
+public int evaluate(int player) { // novērtē spēles stāvokli
+    int pieceCount = 0;
+    int kingCount = 0;
+    int opponentPieceCount = 0;
+    int opponentKingCount = 0;
+    int playerPositionScore = 0;
+    int opponentPositionScore = 0;
+    int centralControlScore = 0;
 
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                peace piece = board[col][row].getPeace();
-                if (piece == null) {
-                    continue;
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            peace piece = board[col][row].getPeace();
+            if (piece == null) {
+                continue;
+            }
+            if (piece.getPeaceType() == player) {
+                pieceCount++;
+                if (piece.isking()) {
+                    kingCount++;
                 }
-                if (piece.getPeaceType() == player) {
-                    pieceCount++;
-                    if (piece.isking()) {
-                        kingCount++;
-                    }
+                if (player == 0) {
+                    playerPositionScore += row;
                 } else {
-                    opponentPieceCount++;
-                    if (piece.isking()) {
-                        opponentKingCount++;
-                    }
+                    playerPositionScore += (7 - row);
+                }
+                if ((row == 3 || row == 4) && (col == 3 || col == 4)) {
+                    centralControlScore += 10;
+                } else if ((row == 2 || row == 5) && (col == 2 || col == 5)) {
+                    centralControlScore += 5;
+                } else if ((row == 1 || row == 6) && (col == 1 || col == 6)) {
+                    centralControlScore += 2;
+                }
+            } else {
+                opponentPieceCount++;
+                if (piece.isking()) {
+                    opponentKingCount++;
+                }
+                if (player == 0) {
+                    opponentPositionScore += (7 - row);
+                } else {
+                    opponentPositionScore += row;
                 }
             }
         }
-        int score = (pieceCount - opponentPieceCount) * 100;
-        score += (kingCount - opponentKingCount) * 200;
-        if(movecount == 80){
-            return 0;
-        }else{
-            return score;
-        }
-
     }
+    int score = (pieceCount - opponentPieceCount) * 100;
+    score += (kingCount - opponentKingCount) * 200;
+    score += (playerPositionScore - opponentPositionScore) * 10;
+    score += centralControlScore;
+
+    if(movecount == 80){
+        return 0;
+    } else {
+        return score;
+    }
+}
 }

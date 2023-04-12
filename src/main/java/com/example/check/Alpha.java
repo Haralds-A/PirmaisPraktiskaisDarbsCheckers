@@ -1,7 +1,7 @@
 package com.example.check;
 
 public class Alpha {
-    private static final int MAX_DEPTH = 7; // maksimālais algoritma dziļums
+    private static final int MAX_DEPTH = 8; // maksimālais algoritma dziļums
     private static int player; // norāda kurš spēlētājs ir maksimizētājs vai nu 0 = sarkanie vai 1 = zaļie
 
     private static int alphaBeta(GameState state, int depth, int alpha, int beta, boolean maximizingPlayer) { // pats alpha-beta lgoritms
